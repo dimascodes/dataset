@@ -125,27 +125,27 @@
       <div id="result"></div>
     </div>
     <script>
+      const API_URL = "/api/predict"; // Proxy digunakan
+
       document.getElementById("prediction-form").onsubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
+
         try {
-          const response = await fetch("/api/predict", {
-            // Gunakan path relatif
+          const response = await fetch(API_URL, {
             method: "POST",
             body: formData,
           });
-          const result = await response.json();
-          if (result.prediction) {
-            document.getElementById("result").innerHTML =
-              `<h2>Prediction: ${result.prediction}</h2>`;
-          } else if (result.error) {
-            document.getElementById("result").innerHTML =
-              `<h2>Error: ${result.error}</h2>`;
-          } else {
-            document.getElementById("result").innerHTML =
-              `<h2>Unexpected response</h2>`;
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
+
+          const result = await response.json();
+          document.getElementById("result").innerHTML =
+            `<h2>Prediction: ${result.prediction}</h2>`;
         } catch (error) {
+          console.error(error);
           document.getElementById("result").innerHTML =
             `<h2>Error: ${error.message}</h2>`;
         }
