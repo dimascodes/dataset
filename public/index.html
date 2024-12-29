@@ -126,8 +126,6 @@
     </div>
     <script>
       const API_URL = "/api_proxy/predict"; // Proxy digunakan
-      const apiProxy = require("./api_proxy");
-      app.use(apiProxy);
 
       document.getElementById("prediction-form").onsubmit = async (e) => {
         e.preventDefault();
