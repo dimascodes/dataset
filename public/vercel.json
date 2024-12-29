@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "@env.BACKEND_URL/:path*"
+      "destination": "/api_proxy/:path*"
     }
   ]
 }
