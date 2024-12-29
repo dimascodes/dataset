@@ -129,13 +129,11 @@
         e.preventDefault();
         const formData = new FormData(e.target);
         try {
-          const response = await fetch(
-            "http://8.215.100.141:5000/api/predict",
-            {
-              method: "POST",
-              body: formData,
-            },
-          );
+          const response = await fetch("/api/predict", {
+            // Gunakan path relatif
+            method: "POST",
+            body: formData,
+          });
           const result = await response.json();
           if (result.prediction) {
             document.getElementById("result").innerHTML =
