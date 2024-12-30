@@ -26,12 +26,15 @@ export default function Home() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     try {
+      // Konversi formData menjadi URLSearchParams
+      const formBody = new URLSearchParams(formData);
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify(formData),
+        body: formBody.toString(),
       });
 
       if (!response.ok) {
