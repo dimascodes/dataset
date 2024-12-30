@@ -1,45 +1,32 @@
-export default function handler(req, res) {
-  if (req.method === "GET") {
-    res
-      .status(200)
-      .json({ message: "API for diabetes prediction is working." });
-  } else if (req.method === "POST") {
-    // Ambil data dari request
-    const {
-      Pregnancies,
-      Glucose,
-      BloodPressure,
-      SkinThickness,
-      Insulin,
-      BMI,
-      DiabetesPedigreeFunction,
-      Age,
-    } = req.body;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-    // Validasi data
-    if (
-      !Pregnancies ||
-      !Glucose ||
-      !BloodPressure ||
-      !SkinThickness ||
-      !Insulin ||
-      !BMI ||
-      !DiabetesPedigreeFunction ||
-      !Age
-    ) {
-      return res.status(400).json({ error: "All fields are required." });
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+
+  if (!apiUrl) {
+    return res.status(500).json({ error: "Backend API URL is not configured" });
+  }
+
+  try {
+    // Mengirim data ke backend FastAPI
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(req.body).toString(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Backend error: ${response.status}`);
     }
 
-    // Contoh logika prediksi sederhana
-    const prediction =
-      parseFloat(Glucose) > 120
-        ? "High risk of diabetes"
-        : "Low risk of diabetes";
-
-    // Kirim hasil prediksi
-    res.status(200).json({ prediction });
-  } else {
-    res.setHeader("Allow", ["GET", "POST"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in predict.js:", error);
+    return res.status(500).json({ error: "Failed to fetch prediction" });
   }
 }
