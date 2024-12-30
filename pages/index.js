@@ -23,7 +23,7 @@ export default function Home() {
     setError("");
     setResult("");
 
-    const apiUrl = "/api/proxy"; // Proxy endpoint di Vercel
+    const apiUrl = "/api/predict"; // Proxy endpoint di Vercel
 
     try {
       const response = await fetch(apiUrl, {
