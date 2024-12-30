@@ -28,7 +28,10 @@ export default function Home() {
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
-        body: new URLSearchParams(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
