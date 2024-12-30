@@ -59,10 +59,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>
-        Implementasi Model Single Layer Perceptron untuk Klasifikasi Status
-        Gejala Diabetes
-      </h1>
+      <h1>Diabetes Prediction</h1>
       <form id="prediction-form">
         <input
           type="number"
@@ -125,19 +122,17 @@
       <div id="result"></div>
     </div>
     <script>
-      const API_URL = "http://8.215.100.141:5000/api/predict"; // Proxy endpoint backend
+      const API_URL = "http://8.215.100.141:5000/api/predict";
 
       document.getElementById("prediction-form").onsubmit = async (e) => {
         e.preventDefault();
+
         const formData = new FormData(e.target);
 
         try {
           const response = await fetch(API_URL, {
             method: "POST",
-            headers: {
-              Accept: "application/json",
-            },
-            body: JSON.stringify(Object.fromEntries(formData)),
+            body: formData,
           });
 
           if (!response.ok) {
