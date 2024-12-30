@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styles from "../public/styles.css";
 
 export default function Home() {
   const [formData, setFormData] = useState({
