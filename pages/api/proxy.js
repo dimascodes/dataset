@@ -1,27 +1,29 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
+  const backendUrl = process.env.BACKEND_API_URL;
 
   try {
+    console.log("Forwarding request to backend:", backendUrl);
+    console.log("Request body:", req.body);
+
     const response = await fetch(backendUrl, {
-      method: "POST",
+      method: req.method,
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": req.headers["content-type"],
       },
       body: req.body,
     });
 
+    console.log("Backend response status:", response.status);
+    const data = await response.text();
+    console.log("Backend response body:", data);
+
     if (!response.ok) {
-      throw new Error(`Backend error: ${response.status}`);
+      throw new Error(`Backend returned status ${response.status}`);
     }
 
-    const data = await response.json();
-    return res.status(200).json(data);
+    res.status(200).json(JSON.parse(data));
   } catch (error) {
-    console.error("Error in proxy.js:", error);
-    return res.status(500).json({ error: "Failed to fetch prediction" });
+    console.error("Proxy error:", error.message);
+    res.status(500).json({ error: "Failed to fetch prediction" });
   }
 }
