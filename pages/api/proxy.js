@@ -1,16 +1,20 @@
 export default async function handler(req, res) {
-  const backendUrl = process.env.BACKEND_API_URL;
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
   try {
     console.log("Forwarding request to backend:", backendUrl);
     console.log("Request body:", req.body);
 
+    // Convert req.body (an object) to URL-encoded string
+    const urlEncodedBody = new URLSearchParams(req.body).toString();
+    console.log("URL-encoded body:", urlEncodedBody);
+
     const response = await fetch(backendUrl, {
       method: req.method,
       headers: {
-        "Content-Type": req.headers["content-type"],
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: req.body,
+      body: urlEncodedBody, // Send URL-encoded string to backend
     });
 
     console.log("Backend response status:", response.status);
