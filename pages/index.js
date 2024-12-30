@@ -23,18 +23,15 @@ export default function Home() {
     setError("");
     setResult("");
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = "/api/proxy"; // Proxy endpoint di Vercel
 
     try {
-      // Konversi formData menjadi URLSearchParams
-      const formBody = new URLSearchParams(formData);
-
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: formBody.toString(),
+        body: new URLSearchParams(formData).toString(),
       });
 
       if (!response.ok) {
