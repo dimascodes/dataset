@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/predict",
-      "destination": "@env.BACKEND_URL/api/predict"
-    }
-  ]
-}
